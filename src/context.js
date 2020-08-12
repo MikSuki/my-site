@@ -1,5 +1,4 @@
 import React from 'react';
-import {data as PROJECT_LIST } from './data.js';
 
 class ContextTitle extends React.Component {
     render() {
@@ -73,7 +72,9 @@ class Context extends React.Component {
 
 class ContextContainer extends React.Component {
     render() {
+        const PROJECT_LIST = this.props.data;
         let context;
+        if(PROJECT_LIST === null) return (<br />)
         // project page
         if (PROJECT_LIST[this.props.page] != null) {
             const data = PROJECT_LIST[this.props.page]

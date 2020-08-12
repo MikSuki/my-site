@@ -1,5 +1,4 @@
 import React from 'react';
-import {data as PROJECT_LIST } from './data.js';
 
 class NavbarBtn extends React.Component {
     render() {
@@ -15,8 +14,9 @@ class NavbarBtn extends React.Component {
 
 class NavbarBtnList extends React.Component {
     render() {
+        const PROJECT_LIST = this.props.data;
         const LIST = [];
-
+        if(PROJECT_LIST === null) return (<br />)
         for (const [key, value] of Object.entries(PROJECT_LIST)) {
             LIST.push(
                 <span key={key}>
@@ -54,6 +54,7 @@ class Navbar extends React.Component {
                     <div className="bg-dark bg-transparent p-4">
                         <h5 className="text-white">Side Project</h5>
                         <NavbarBtnList
+                            data={this.props.data}
                             handleNavBtnClick={this.twoClick} />
                     </div>
                 </div>

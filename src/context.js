@@ -12,22 +12,28 @@ class ContextTitle extends React.Component {
 
 class ContextRow extends React.Component {
     render() {
-        const text = this.props.text.split("<br />");
-        const intro = [];
-        let i = 0;
-        text.forEach(element => {
-            intro.push(element)
-            intro.push(<br key={i++} />)
-        });
+        // const text = this.props.text.split("<br />");
+        if (this.props.introData != null) {
+            const text = this.props.introData.split("\n");
+            const intro = [];
+            let i = 0;
+            text.forEach(element => {
+                intro.push(element)
+                intro.push(<br key={i++} />)
+            });
 
-        return (
-            <div className='row'>
-                <div className='col'></div>
-                <div className='col text-left'>
-                    {intro}
+            return (
+                <div className='row'>
+                    <div className='col-12 col-sm-2 col-md-3 col-xl-3'></div>
+                    <div className='col-12 col-sm-8 col-md-6 col-xl-6 text-left'>
+                        {intro}
+                    </div>
+                    {/* <div className='col-12 col-md-3'></div> */}
                 </div>
-                <div className='col'></div>
-            </div>
+            )
+        }
+        return (
+            <br />
         )
     }
 }
@@ -46,9 +52,10 @@ class ContextBtn extends React.Component {
 }
 
 class Context extends React.Component {
+
     render() {
         const title = this.props.title;
-        const { demoIp: demoIp, githubIp: githubIp, intro: intro } = this.props.value;
+        const { demoIp: demoIp, githubIp: githubIp, introData: introData } = this.props.contextData;
         return (
             <div>
                 <br />
@@ -56,7 +63,7 @@ class Context extends React.Component {
                     text={title} />
                 <br />
                 <ContextRow
-                    text={intro} />
+                    introData={introData} />
                 <br /><br />
                 <ContextBtn
                     ip={demoIp}
@@ -74,7 +81,7 @@ class ContextContainer extends React.Component {
     render() {
         const PROJECT_LIST = this.props.data;
         let context;
-        if(PROJECT_LIST === null) return (<br />)
+        if (PROJECT_LIST === null) return (<br />)
         // project page
         if (PROJECT_LIST[this.props.page] != null) {
             const data = PROJECT_LIST[this.props.page]
@@ -82,7 +89,7 @@ class ContextContainer extends React.Component {
                 <Context
                     key={this.props.page}
                     title={this.props.page}
-                    value={data} />
+                    contextData={data} />
             )
         }
         // first page
@@ -102,7 +109,7 @@ class ContextContainer extends React.Component {
         }
 
         return (
-            <div className='container text-center'>
+            <div className='container-fluid text-center'>
                 {context}
             </div>
         )

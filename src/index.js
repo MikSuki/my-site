@@ -5,6 +5,9 @@ import './index.css';
 import { Navbar } from './navbar.js';
 import { ContextContainer } from './context.js';
 
+const DATA_PATH = 'static/data/'
+const MAIN_FILE = 'mySite.json'
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -19,11 +22,23 @@ class App extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "static/data/mySite.json",
+            url: DATA_PATH + MAIN_FILE,
         }).done(function (data) {
+            for(let key in data){
+                $.ajax({
+                    url: DATA_PATH + data[key]['fileName'],
+                }).done(function (intro) {
+                    const state_data = this.state.data
+                    state_data[key]['introData'] = intro
+                    this.setState({
+                        data: state_data
+                    })
+                }.bind(this));
+            }
             this.setState({
                 data: data
             })
+
         }.bind(this));
     }
 
@@ -32,21 +47,22 @@ class App extends React.Component {
     }
 
     handleNavBtnClick(val) {
-        this.setState({
-            page: val
-        });
+        if(this.page != val)
+            this.setState({
+                page: val
+            });
     }
 
     render() {
         return (
             <div>
                 <Navbar
-                    data={this.state.data}
                     ref={this.navbar}
+                    data={this.state.data}
                     handleNavBtnClick={this.handleNavBtnClick} />
                 <ContextContainer
-                    data={this.state.data}
                     page={this.state.page}
+                    data={this.state.data}
                     handleNavbarOpen={this.handleNavbarOpen} />
             </div>
         )

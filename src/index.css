@@ -39,13 +39,24 @@ a {
 }
 
 .main-img {
-    /* clip: rect(0px, 1920px, 1080px, 0px); */
     width: 40vw;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border-style: solid;
     cursor: pointer;
+}
+
+@media screen and (max-width: 995px) {
+    .main-img {
+        width: 50vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .main-img {
+        width: 80vw;
+    }
 }
 
 .main-img-text {

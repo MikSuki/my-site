@@ -1,81 +1,7 @@
 import React from 'react';
+import { ContextHome } from './context_home.js';
+import { ContextDetail } from './context_detail.js';
 
-class ContextTitle extends React.Component {
-    render() {
-        return (
-            <h2>
-                {this.props.text}
-            </h2>
-        )
-    }
-}
-
-class ContextRow extends React.Component {
-    render() {
-        // const text = this.props.text.split("<br />");
-        if (this.props.introData != null) {
-            const text = this.props.introData.split("\n");
-            const intro = [];
-            let i = 0;
-            text.forEach(element => {
-                intro.push(element)
-                intro.push(<br key={i++} />)
-            });
-
-            return (
-                <div className='row'>
-                    <div className='col-12 col-sm-2 col-md-3 col-xl-3'></div>
-                    <div className='col-12 col-sm-8 col-md-6 col-xl-6 text-left'>
-                        {intro}
-                    </div>
-                    {/* <div className='col-12 col-md-3'></div> */}
-                </div>
-            )
-        }
-        return (
-            <br />
-        )
-    }
-}
-
-class ContextBtn extends React.Component {
-    render() {
-        return (
-            <a
-                className="btn btn-outline-light"
-                href={this.props.ip}
-                target="_blank" role="button">
-                {this.props.btnName}
-            </a>
-        )
-    }
-}
-
-class Context extends React.Component {
-
-    render() {
-        const title = this.props.title;
-        const { demoIp: demoIp, githubIp: githubIp, introData: introData } = this.props.contextData;
-        return (
-            <div>
-                <br />
-                <ContextTitle
-                    text={title} />
-                <br />
-                <ContextRow
-                    introData={introData} />
-                <br /><br />
-                <ContextBtn
-                    ip={demoIp}
-                    btnName={'DEMO'} />
-                &nbsp;&nbsp;
-                <ContextBtn
-                    ip={githubIp}
-                    btnName={'GitHub'} />
-            </div>
-        )
-    }
-}
 
 class ContextContainer extends React.Component {
     render() {
@@ -83,33 +9,27 @@ class ContextContainer extends React.Component {
         let context;
         if (PROJECT_LIST === null) return (<br />)
         // project page
-        if (PROJECT_LIST[this.props.page] != null) {
+        if (this.props.page != 0) {
             const data = PROJECT_LIST[this.props.page]
             context = (
-                <Context
-                    key={this.props.page}
-                    title={this.props.page}
-                    contextData={data} />
-            )
-        }
-        // first page
-        else {
-            context = (
-                <div>
-                    <br /><br /><br /><br />
-                    <h3>Portfolio</h3><br /><br /><br />
-                    <a className="btn btn-outline-light w-30"
-                        href='# ' role="button"
-                        onClick={this.props.handleNavbarOpen}
-                    >
-                        view
-                    </a>
+                <div className='container-fluid text-center'>
+                    <ContextDetail
+                        key={this.props.page}
+                        title={this.props.page}
+                        detailData={data} />
                 </div>
             )
         }
+        // home page
+        else {
+            context = <ContextHome
+                data={this.props.data}
+                chgPage={this.props.chgPage}
+                handleScrollWindow={this.props.handleScrollWindow} />
+        }
 
         return (
-            <div className='container-fluid text-center'>
+            <div className='context-container'>
                 {context}
             </div>
         )

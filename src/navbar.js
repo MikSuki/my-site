@@ -35,34 +35,43 @@ class Navbar extends React.Component {
     constructor(props) {
         super(props);
         this.myRef = React.createRef();
-        this.twoClick = this.twoClick.bind(this)
+        this.closeNbAndOpen = this.closeNbAndOpen.bind(this)
     }
 
-    handleClick() {
+    // navbar close
+    closeNavbar() {
         this.myRef.current.click();
+        return
+        const flag = this.myRef.current.ariaExpanded
+        console.log(flag)
+        if(flag){
+            console.log('in')
+            this.myRef.current.click();
+        }
     }
 
-    twoClick(key) {
-        this.handleClick()
+    closeNbAndOpen(key) {
+        this.closeNavbar()
         this.props.handleNavBtnClick(key)
     }
 
     render() {
         return (
-            <div className="pos-f-t">
+            //bg-transparent
+            <div className="pos-f-t" className='myNavbar'>
                 <div className="collapse" id="navbarToggleExternalContent">
-                    <div className="bg-dark bg-transparent p-4">
+                    <div className="bg-dark  p-4">
                         <h5 className="text-white">Side Project</h5>
                         <NavbarBtnList
                             data={this.props.data}
-                            handleNavBtnClick={this.twoClick} />
+                            handleNavBtnClick={this.closeNbAndOpen} />
                     </div>
                 </div>
-                <nav className="navbar navbar-dark bg-dark bg-transparent">
+                <nav className="navbar navbar-dark bg-dark ">
                     <ul className='p-0 m-0'>
-                        <h2 id='' className="navbar-brand" href="# "></h2>
+                        <h2 className="navbar-brand" href="# " onClick={()=>this.props.chgPage(0)}>HOME</h2>
                     </ul>
-                    <button className="navbar-toggler custom-toggler" type="button" data-toggle="collapse"
+                    <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
                         aria-expanded="false" aria-label="Toggle navigation"
                         ref={this.myRef}>

@@ -34,7 +34,7 @@ class PageBtn extends React.Component {
 class PageGroup extends React.Component {
     render() {
         const pageBtns = []
-        for (let i = 0; i < 5; ++i) {
+        for (let i = 0; i < this.props.num; ++i) {
             pageBtns.push(
                 <PageBtn
                     key={i}
@@ -60,10 +60,11 @@ class ImgGroup extends React.Component {
         const text = []
         const extension = '.png'
         const imgs = []
-
+        let dataLen = 0
         if (this.props.data == null) return (<br />)
 
         for (let i in this.props.data) {
+            ++dataLen
             text.push(i)
             imgurFileName.push(path + this.props.data[i].imgurFileName + extension)
         }
@@ -82,6 +83,7 @@ class ImgGroup extends React.Component {
             <div className='img-group'>
                 {imgs}
                 <PageGroup
+                    num = {dataLen}
                     handleScrollWindow={this.props.handleScrollWindow} />
             </div>
         )

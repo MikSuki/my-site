@@ -11,15 +11,18 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: 0,
+            imgGroupPage: 0,
+            contextPage: 0,
             data: null
         };
-        this.navbar = React.createRef();
+        this.ref = {
+            navbar: React.createRef(),
+        }
         this.handleNavbarClose = this.handleNavbarClose.bind(this);
         this.handleNavBtnClick = this.handleNavBtnClick.bind(this);
         this.afterGetPortfolioList = this.afterGetPortfolioList.bind(this);
         this.afterGetEachIntro = this.afterGetEachIntro.bind(this);
-        this.chgPage = this.chgPage.bind(this)
+        this.chgContextPage = this.chgContextPage.bind(this)
     }
 
     componentDidMount() {
@@ -27,11 +30,24 @@ class App extends React.Component {
         $.ajax({
             url: DATA_PATH + MAIN_FILE,
         }).done(cb);
+
+        this.loop()
+    }
+
+    loop() {
+        const period = 5000
+        setInterval(() => {
+            if (this.state.contextPage === 0 && this.state.data != null) {
+                this.handleScrollWindow()
+            }
+        }, period)
     }
 
     afterGetPortfolioList(data) {
         const cb = this.afterGetEachIntro
+        let totalWindowPage = 0
         for (let key in data) {
+            ++totalWindowPage
             $.ajax({
                 url: DATA_PATH + data[key]['fileName'],
             }).done(function (data) {
@@ -41,6 +57,7 @@ class App extends React.Component {
         this.setState({
             data: data
         })
+        this.handleScrollWindow = this.handleScrollWindow(totalWindowPage)
         this.handleScrollWindow(0)
     }
 
@@ -53,30 +70,45 @@ class App extends React.Component {
     }
 
     handleNavbarClose() {
-        this.navbar.current.closeNavbar()
+        this.ref.navbar.current.closeNavbar()
     }
 
     handleNavBtnClick(val) {
-        if (this.page != val)
+        if (this.contextPage != val)
             this.setState({
-                page: val
+                contextPage: val
             });
     }
 
-    handleScrollWindow(windowPage) {
-        const w = window.innerWidth
-        window.scrollTo({
-            left: w * windowPage,
-            behavior: "smooth"
-        });
+    // init after func-> afterGetPortfolioList
+    handleScrollWindow(totalWindowPage) {
+        return function (imgGroupPage = -1) {
+            let curWindowPage = this.state.imgGroupPage
+            const w = window.innerWidth
+            if (imgGroupPage == -1) {
+                if (++curWindowPage >= totalWindowPage)
+                    curWindowPage = 0
+            }
+            else {
+                curWindowPage = imgGroupPage
+            }
+            window.scrollTo({
+                left: w * curWindowPage,
+                behavior: "smooth"
+            });
+            this.setState({
+                imgGroupPage: curWindowPage
+            })
+            // return curWindowPage
+        }.bind(this)
     }
 
     // 0-> home
     // other-> detail
-    chgPage(page) {
-        // if (page == 0) this.handleNavbarClose()
+    chgContextPage(contextPage) {
+        // if (contextPage == 0) this.handleNavbarClose()
         this.setState({
-            page: page
+            contextPage: contextPage
         })
     }
 
@@ -84,14 +116,15 @@ class App extends React.Component {
         return (
             <div>
                 <Navbar
-                    ref={this.navbar}
+                    ref={this.ref.navbar}
                     data={this.state.data}
                     handleNavBtnClick={this.handleNavBtnClick}
-                    chgPage={this.chgPage} />
+                    chgContextPage={this.chgContextPage} />
                 <ContextContainer
-                    page={this.state.page}
+                    imgGroupPage={this.state.imgGroupPage}
+                    contextPage={this.state.contextPage}
                     data={this.state.data}
-                    chgPage={this.chgPage}
+                    chgContextPage={this.chgContextPage}
                     handleNavbarClose={this.handleNavbarClose}
                     handleScrollWindow={this.handleScrollWindow} />
             </div>
@@ -100,4 +133,4 @@ class App extends React.Component {
 }
 
 
-export {App};
+export { App };

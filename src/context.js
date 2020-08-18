@@ -9,13 +9,13 @@ class ContextContainer extends React.Component {
         let context;
         if (PROJECT_LIST === null) return (<br />)
         // project page
-        if (this.props.page != 0) {
-            const data = PROJECT_LIST[this.props.page]
+        if (this.props.contextPage != 0) {
+            const data = PROJECT_LIST[this.props.contextPage]
             context = (
                 <div className='container-fluid text-center'>
                     <ContextDetail
-                        key={this.props.page}
-                        title={this.props.page}
+                        key={this.props.contextPage}
+                        title={this.props.contextPage}
                         detailData={data} />
                 </div>
             )
@@ -23,13 +23,15 @@ class ContextContainer extends React.Component {
         // home page
         else {
             context = <ContextHome
+                imgGroupPage={this.props.imgGroupPage}
                 data={this.props.data}
-                chgPage={this.props.chgPage}
+                chgContextPage={this.props.chgContextPage}
                 handleScrollWindow={this.props.handleScrollWindow} />
         }
 
         return (
-            <div className='context-container'>
+            <div>
+                <br /><br />
                 {context}
             </div>
         )

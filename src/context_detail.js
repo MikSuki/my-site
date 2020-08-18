@@ -10,6 +10,16 @@ class Title extends React.Component {
     }
 }
 
+class RowImg extends React.Component {
+    render() {
+        return (
+            <div className='text-center'>
+                <img className="main-img no-border" src={this.props.src}></img>
+            </div>
+        )
+    }
+}
+
 class Row extends React.Component {
     render() {
         // const text = this.props.text.split("<br />");
@@ -18,8 +28,23 @@ class Row extends React.Component {
             const intro = [];
             let i = 0;
             text.forEach(element => {
-                intro.push(element)
-                intro.push(<br key={i++} />)
+                // text
+                if (element.indexOf('imgur.com') === -1) {
+                    intro.push(element)
+                }
+                // is image
+                else
+                    intro.push(
+                        <RowImg
+                            key={i * - 1 - 1}
+                            src={element} />
+                    )
+                    
+                // br or line
+                if (element.indexOf('●') !== -1)
+                    intro.push(<hr key={i++}></hr>)
+                else
+                    intro.push(<br key={i++} />)
             });
 
             return (

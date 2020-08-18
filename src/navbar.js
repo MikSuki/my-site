@@ -16,7 +16,7 @@ class NavbarBtnList extends React.Component {
     render() {
         const PROJECT_LIST = this.props.data;
         const LIST = [];
-        if(PROJECT_LIST === null) return (<br />)
+        if (PROJECT_LIST === null) return (<br />)
         for (const [key, value] of Object.entries(PROJECT_LIST)) {
             LIST.push(
                 <span key={key}>
@@ -44,7 +44,7 @@ class Navbar extends React.Component {
         return
         const flag = this.myRef.current.ariaExpanded
         console.log(flag)
-        if(flag){
+        if (flag) {
             console.log('in')
             this.myRef.current.click();
         }
@@ -57,30 +57,26 @@ class Navbar extends React.Component {
 
     render() {
         return (
-            //bg-transparent
-            <div className="pos-f-t" className='myNavbar'>
-                <div className="collapse" id="navbarToggleExternalContent">
-                    <div className="bg-dark  p-4">
-                        <h5 className="text-white">Side Project</h5>
-                        <NavbarBtnList
-                            data={this.props.data}
-                            handleNavBtnClick={this.closeNbAndOpen} />
-                    </div>
+            <nav className="navbar navbar-dark bg-dark">
+                <div className="navbar-collapse collapse"
+                    id="collapsingNavbar">
+                    <h5 className="text-white">Side Project</h5>
+                    <NavbarBtnList
+                        data={this.props.data}
+                        handleNavBtnClick={this.closeNbAndOpen} />
                 </div>
-                <nav className="navbar navbar-dark bg-dark ">
-                    <ul className='p-0 m-0'>
-                        <h2 className="navbar-brand" href="# " onClick={()=>this.props.chgPage(0)}>HOME</h2>
-                    </ul>
-                    <button className="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-                        aria-expanded="false" aria-label="Toggle navigation"
-                        ref={this.myRef}>
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                </nav>
-            </div>
+                <h1 href="# " className="navbar-brand" onClick={() => this.props.chgContextPage(0)}>HOME</h1>
+                <button className="navbar-toggler ml-auto"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#collapsingNavbar"
+                    ref={this.myRef}>
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                &nbsp;&nbsp;&nbsp;
+            </nav>
         )
     }
 }
 
-export {Navbar};
+export { Navbar };

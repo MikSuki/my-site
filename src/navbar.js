@@ -13,6 +13,13 @@ class NavbarBtn extends React.Component {
 }
 
 class NavbarBtnList extends React.Component {
+    constructor(props) {
+        super(props)
+        this.refs = {
+            Toggle: React.createRef()
+        }
+    }
+
     render() {
         const PROJECT_LIST = this.props.data;
         const LIST = [];
@@ -34,19 +41,17 @@ class NavbarBtnList extends React.Component {
 class Navbar extends React.Component {
     constructor(props) {
         super(props);
-        this.myRef = React.createRef();
+        this.myRef = {
+            Toggle: React.createRef()
+        };
         this.closeNbAndOpen = this.closeNbAndOpen.bind(this)
     }
 
     // navbar close
     closeNavbar() {
-        this.myRef.current.click();
-        return
-        const flag = this.myRef.current.ariaExpanded
-        console.log(flag)
-        if (flag) {
-            console.log('in')
-            this.myRef.current.click();
+        const element = this.myRef.Toggle.current
+        if (element.ariaExpanded == 'true') {
+            element.click();
         }
     }
 
@@ -56,6 +61,10 @@ class Navbar extends React.Component {
     }
 
     render() {
+        if (this.props.needCloseNavbar) {
+            this.closeNavbar()
+        }
+
         return (
             <nav className="navbar navbar-dark bg-dark">
                 <div className="navbar-collapse collapse"
@@ -65,12 +74,12 @@ class Navbar extends React.Component {
                         data={this.props.data}
                         handleNavBtnClick={this.closeNbAndOpen} />
                 </div>
-                <h1 href="# " className="navbar-brand" onClick={() => this.props.chgContextPage(0)}>HOME</h1>
-                <button className="navbar-toggler ml-auto"
+                <div className='my-navbar-title' href="# " onClick={() => this.props.chgContextPage(0)}>HOME</div>
+                <button className="navbar-toggler ml-auto bg-secondary"
                     type="button"
                     data-toggle="collapse"
                     data-target="#collapsingNavbar"
-                    ref={this.myRef}>
+                    ref={this.myRef.Toggle}>
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 &nbsp;&nbsp;&nbsp;

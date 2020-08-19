@@ -26,7 +26,7 @@ class ContextContainer extends React.Component {
                 imgGroupPage={this.props.imgGroupPage}
                 data={this.props.data}
                 chgContextPage={this.props.chgContextPage}
-                handleScrollWindow={this.props.handleScrollWindow} />
+                chgImgGroupPage={this.props.chgImgGroupPage} />
         }
 
         return (

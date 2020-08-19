@@ -25,6 +25,11 @@ hr {
     white-space: nowrap
 }
 
+.my-navbar-title {
+    cursor: pointer;
+    font-size: calc(2vw + 2vh);
+}
+
 .main-img-content {
     width: 100vw;
     position: relative;
@@ -49,18 +54,6 @@ hr {
     padding: 5px 8px 5px 8px;
 }
 
-@media screen and (max-width: 995px) {
-    .main-img {
-        width: 50vw;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .main-img {
-        width: 80vw;
-    }
-}
-
 .main-img-text {
     position: absolute;
     top: 8px;
@@ -82,6 +75,22 @@ hr {
     display: inline-block;
 }
 
-.main-img-pg:hover {
+.main-img-pg-active {
     background-color: #FFA042;
+}
+
+@media screen and (max-width: 995px) {
+    .main-img {
+        width: 50vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .main-img {
+        width: 80vw;
+    }
+    .main-img-pg {
+        height: 3vw;
+        width: 3vw;
+    }
 }

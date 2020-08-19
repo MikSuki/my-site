@@ -15,8 +15,8 @@ class App extends React.Component {
             contextPage: 0,
             data: null
         };
-        this.ref = {
-            navbar: React.createRef(),
+        this.myRef = {
+            Navbar: React.createRef()
         }
         this.handleNavbarClose = this.handleNavbarClose.bind(this);
         this.handleNavBtnClick = this.handleNavBtnClick.bind(this);
@@ -38,7 +38,7 @@ class App extends React.Component {
         const period = 5000
         setInterval(() => {
             if (this.state.contextPage === 0 && this.state.data != null) {
-                this.handleScrollWindow()
+                this.chgImgGroupPage()
             }
         }, period)
     }
@@ -57,8 +57,8 @@ class App extends React.Component {
         this.setState({
             data: data
         })
-        this.handleScrollWindow = this.handleScrollWindow(totalWindowPage)
-        this.handleScrollWindow(0)
+        this.chgImgGroupPage = this.chgImgGroupPage(totalWindowPage)
+        this.chgImgGroupPage(0)
     }
 
     afterGetEachIntro(dateKey, data) {
@@ -70,7 +70,7 @@ class App extends React.Component {
     }
 
     handleNavbarClose() {
-        this.ref.navbar.current.closeNavbar()
+        this.myRef.Navbar.current.closeNavbar()
     }
 
     handleNavBtnClick(val) {
@@ -81,10 +81,9 @@ class App extends React.Component {
     }
 
     // init after func-> afterGetPortfolioList
-    handleScrollWindow(totalWindowPage) {
+    chgImgGroupPage(totalWindowPage) {
         return function (imgGroupPage = -1) {
             let curWindowPage = this.state.imgGroupPage
-            const w = window.innerWidth
             if (imgGroupPage == -1) {
                 if (++curWindowPage >= totalWindowPage)
                     curWindowPage = 0
@@ -92,10 +91,6 @@ class App extends React.Component {
             else {
                 curWindowPage = imgGroupPage
             }
-            window.scrollTo({
-                left: w * curWindowPage,
-                behavior: "smooth"
-            });
             this.setState({
                 imgGroupPage: curWindowPage
             })
@@ -106,7 +101,7 @@ class App extends React.Component {
     // 0-> home
     // other-> detail
     chgContextPage(contextPage) {
-        // if (contextPage == 0) this.handleNavbarClose()
+        if (contextPage == 0) this.handleNavbarClose()
         this.setState({
             contextPage: contextPage
         })
@@ -116,7 +111,7 @@ class App extends React.Component {
         return (
             <div>
                 <Navbar
-                    ref={this.ref.navbar}
+                    ref={this.myRef.Navbar}
                     data={this.state.data}
                     handleNavBtnClick={this.handleNavBtnClick}
                     chgContextPage={this.chgContextPage} />
@@ -126,7 +121,7 @@ class App extends React.Component {
                     data={this.state.data}
                     chgContextPage={this.chgContextPage}
                     handleNavbarClose={this.handleNavbarClose}
-                    handleScrollWindow={this.handleScrollWindow} />
+                    chgImgGroupPage={this.chgImgGroupPage} />
             </div>
         )
     }

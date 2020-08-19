@@ -22,10 +22,13 @@ class Img extends React.Component {
 
 class PageBtn extends React.Component {
     render() {
+        let className = 'main-img-pg'
+        if(this.props.isActive)
+            className += ' main-img-pg-active'
         return (
             <a
-                className='main-img-pg'
-                onMouseOver={this.props.handleScrollWindow}>
+                className={className}
+                onMouseOver={this.props.chgImgGroupPage}>
             </a>
         )
     }
@@ -38,10 +41,12 @@ class PageGroup extends React.Component {
             <span key={-9999}>&nbsp;&nbsp;</span>
         )
         for (let i = 0; i < this.props.num; ++i) {
+            const isActive = i === this.props.imgGroupPage ? true : false
             pageBtns.push(
                 <PageBtn
                     key={i}
-                    handleScrollWindow={() => this.props.handleScrollWindow(i)} />
+                    isActive={isActive}
+                    chgImgGroupPage={() => this.props.chgImgGroupPage(i)} />
             )
             pageBtns.push(
                 <span key={i - 100}>&nbsp;&nbsp;</span>
@@ -107,7 +112,8 @@ class ImgGroup extends React.Component {
                 {imgs}
                 <PageGroup
                     num={dataLen}
-                    handleScrollWindow={this.props.handleScrollWindow} />
+                    imgGroupPage={this.props.imgGroupPage}
+                    chgImgGroupPage={this.props.chgImgGroupPage} />
             </div>
         )
     }
@@ -121,7 +127,7 @@ class ContextHome extends React.Component {
                 imgGroupPage={this.props.imgGroupPage}
                 data={this.props.data}
                 chgContextPage={this.props.chgContextPage}
-                handleScrollWindow={this.props.handleScrollWindow} />
+                chgImgGroupPage={this.props.chgImgGroupPage} />
         )
     }
 }

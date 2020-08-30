@@ -1,131 +1,115 @@
-import React from 'react';
-import $ from 'jquery'
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+// import $ from 'jquery'
 import './index.css';
-import { Navbar } from './navbar.js';
-import { ContextContainer } from './context.js';
+import { Navbar } from './navbar';
+import { ContextContainer } from './context';
 
-const DATA_PATH = 'static/data/'
-const MAIN_FILE = 'mySite.json'
+const DATA_PATH = 'static/data/';
+const MAIN_FILE = 'mySite.json';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            imgGroupPage: 0,
-            contextPage: 0,
-            data: null
-        };
-        this.myRef = {
-            Navbar: React.createRef()
+const useFetch = url => {
+    const [portfolioData, setPortfolioData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchUser = async () => {
+        // console.log('getting 1')
+        const response = await fetch(url);
+        // console.log('getting 2')
+        const portfolioData = await response.json();
+        // console.log('getting 3')
+        for (let key in portfolioData) {
+            const response = await fetch(DATA_PATH + portfolioData[key]['fileName']);
+            const eachData = await response.text();
+            portfolioData[key]['introData'] = eachData;
         }
-        this.handleNavbarClose = this.handleNavbarClose.bind(this);
-        this.handleNavBtnClick = this.handleNavBtnClick.bind(this);
-        this.afterGetPortfolioList = this.afterGetPortfolioList.bind(this);
-        this.afterGetEachIntro = this.afterGetEachIntro.bind(this);
-        this.chgContextPage = this.chgContextPage.bind(this)
-    }
+        setPortfolioData(portfolioData);
+        setLoading(false);
+    };
+    useEffect(() => {
+        fetchUser();
+    }, []);
+    return { portfolioData, loading };
+};
 
-    componentDidMount() {
-        const cb = this.afterGetPortfolioList
-        $.ajax({
-            url: DATA_PATH + MAIN_FILE,
-        }).done(cb);
+const App = () => {
+    const [imgGroupPage, setImgGroupPage] = useState(0);
+    const [totalImgGroupPage, setTotalImgGroupPage] = useState(0);
+    const [contextPage, setContextPage] = useState(0);
+    const ref_navbar = useRef(null);
+    const ref_totalImgGroupPage = useRef(totalImgGroupPage);
+    const { portfolioData, } = useFetch(DATA_PATH + MAIN_FILE);
 
-        this.loop()
-    }
+    useEffect(() => {
+        console.log('portfolio data change')
+        console.log(portfolioData)
+        if (portfolioData !== null) {
+            const period = 5000;
+            const totalPage = Object.keys(portfolioData).length;
+            setTotalImgGroupPage(totalPage);
 
-    loop() {
-        const period = 5000
-        setInterval(() => {
-            if (this.state.contextPage === 0 && this.state.data != null) {
-                this.chgImgGroupPage()
+            const timerID = setInterval(() => {
+                chgImgGroupPage();
+            }, period);
+            return () => {
+                clearInterval(timerID);
+                console.log('clear Interval')
             }
-        }, period)
+        }
+    }, [portfolioData]);
+
+    useEffect(() => {
+        ref_totalImgGroupPage.current = totalImgGroupPage
+    }, [totalImgGroupPage])
+
+    const handleNavbarClose = () => {
+        const element = ref_navbar.current;
+        element.closeNavbar();
     }
 
-    afterGetPortfolioList(data) {
-        const cb = this.afterGetEachIntro
-        let totalWindowPage = 0
-        for (let key in data) {
-            ++totalWindowPage
-            $.ajax({
-                url: DATA_PATH + data[key]['fileName'],
-            }).done(function (data) {
-                cb(key, data)
+    const handleNavBtnClick = val => {
+        if (contextPage !== val)
+            setContextPage(val);
+    }
+
+    const chgImgGroupPage = (page = -1) => {
+        if (page === -1) {
+            setImgGroupPage(imgGroupPage => {
+                if (imgGroupPage + 1 >= ref_totalImgGroupPage.current)
+                    return 0;
+                return imgGroupPage + 1;
             });
         }
-        this.setState({
-            data: data
-        })
-        this.chgImgGroupPage = this.chgImgGroupPage(totalWindowPage)
-        this.chgImgGroupPage(0)
-    }
-
-    afterGetEachIntro(dateKey, data) {
-        const state_data = this.state.data
-        state_data[dateKey]['introData'] = data
-        this.setState({
-            data: state_data
-        })
-    }
-
-    handleNavbarClose() {
-        this.myRef.Navbar.current.closeNavbar()
-    }
-
-    handleNavBtnClick(val) {
-        if (this.contextPage != val)
-            this.setState({
-                contextPage: val
-            });
-    }
-
-    // init after func-> afterGetPortfolioList
-    chgImgGroupPage(totalWindowPage) {
-        return function (imgGroupPage = -1) {
-            let curWindowPage = this.state.imgGroupPage
-            if (imgGroupPage == -1) {
-                if (++curWindowPage >= totalWindowPage)
-                    curWindowPage = 0
-            }
-            else {
-                curWindowPage = imgGroupPage
-            }
-            this.setState({
-                imgGroupPage: curWindowPage
-            })
-            // return curWindowPage
-        }.bind(this)
-    }
+        else {
+            setImgGroupPage(page);
+        }
+    };
 
     // 0-> home
     // other-> detail
-    chgContextPage(contextPage) {
-        if (contextPage == 0) this.handleNavbarClose()
-        this.setState({
-            contextPage: contextPage
-        })
+    const chgContextPage = contextPage => {
+        if (contextPage === 0) {
+            handleNavbarClose();
+            chgImgGroupPage(0);
+        }
+        setContextPage(contextPage);
     }
 
-    render() {
-        return (
-            <div>
-                <Navbar
-                    ref={this.myRef.Navbar}
-                    data={this.state.data}
-                    handleNavBtnClick={this.handleNavBtnClick}
-                    chgContextPage={this.chgContextPage} />
-                <ContextContainer
-                    imgGroupPage={this.state.imgGroupPage}
-                    contextPage={this.state.contextPage}
-                    data={this.state.data}
-                    chgContextPage={this.chgContextPage}
-                    handleNavbarClose={this.handleNavbarClose}
-                    chgImgGroupPage={this.chgImgGroupPage} />
-            </div>
-        )
-    }
+    return (
+        <>
+            <Navbar
+                ref={ref_navbar}
+                data={portfolioData}
+                handleNavBtnClick={handleNavBtnClick}
+                chgContextPage={chgContextPage} />
+            <ContextContainer
+                imgGroupPage={imgGroupPage}
+                contextPage={contextPage}
+                data={portfolioData}
+                chgContextPage={chgContextPage}
+                handleNavbarClose={handleNavbarClose}
+                chgImgGroupPage={chgImgGroupPage} />
+        </>
+    );
 }
-
 
 export { App };

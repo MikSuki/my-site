@@ -1,41 +1,42 @@
 import React from 'react';
-import { ContextHome } from './context_home.js';
-import { ContextDetail } from './context_detail.js';
+import { ContextHome } from './context_home';
+import { ContextDetail } from './context_detail';
 
-
-class ContextContainer extends React.Component {
-    render() {
-        const PROJECT_LIST = this.props.data;
-        let context;
-        if (PROJECT_LIST === null) return (<br />)
-        // project page
-        if (this.props.contextPage != 0) {
-            const data = PROJECT_LIST[this.props.contextPage]
-            context = (
-                <div className='container-fluid text-center'>
-                    <ContextDetail
-                        key={this.props.contextPage}
-                        title={this.props.contextPage}
-                        detailData={data} />
-                </div>
-            )
-        }
-        // home page
-        else {
-            context = <ContextHome
-                imgGroupPage={this.props.imgGroupPage}
-                data={this.props.data}
-                chgContextPage={this.props.chgContextPage}
-                chgImgGroupPage={this.props.chgImgGroupPage} />
-        }
-
-        return (
-            <div>
-                <br /><br />
-                {context}
+const ContextContainer = props => {
+    const PROJECT_LIST = props.data;
+    let context;
+    if (PROJECT_LIST === null) return (<br />);
+    // project page
+    if (props.contextPage !== 0) {
+        const data = PROJECT_LIST[props.contextPage];
+        context = (
+            <div className='container-fluid text-center'>
+                <ContextDetail
+                    key={props.contextPage}
+                    title={props.contextPage}
+                    detailData={data} />
             </div>
-        )
+        );
     }
-}
+    // home page
+    else {
+        context = (
+            <ContextHome
+                imgGroupPage={props.imgGroupPage}
+                data={props.data}
+                chgContextPage={props.chgContextPage}
+                chgImgGroupPage={props.chgImgGroupPage} />
+        );
+    }
+
+    return (
+        <div>
+            <br /><br />
+            {context}
+        </div>
+    );
+};
+
+
 
 export { ContextContainer };

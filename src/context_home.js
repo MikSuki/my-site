@@ -1,135 +1,126 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-class ImgText extends React.Component {
-    render() {
-        return (
-            <div>{this.props.text}</div>
-        )
-    }
-}
+const ImgText = props => {
+    return (
+        <div>{props.text}</div>
+    );
+};
 
-class Img extends React.Component {
-    render() {
-        return (
-            <img
-                className='main-img padding-black'
-                src={this.props.url}
-                onClick={this.props.chgContextPage} >
-            </img>
-        )
-    }
-}
+const Img = props => {
+    return (
+        <img
+            className='main-img padding-black'
+            src={props.url}
+            alt="img not found"
+            onClick={props.chgContextPage}
+        />
+    );
+};
 
-class PageBtn extends React.Component {
-    render() {
-        let className = 'main-img-pg'
-        if(this.props.isActive)
-            className += ' main-img-pg-active'
-        return (
-            <a
-                className={className}
-                onMouseOver={this.props.chgImgGroupPage}>
-            </a>
-        )
-    }
-}
+const PageBtn = props => {
+    let className = 'main-img-pg';
+    if (props.isActive)
+        className += ' main-img-pg-active';
+    return (
+        <a
+            href='# '
+            className={className}
+            onMouseOver={props.chgImgGroupPage}>
+        </a>
+    );
+};
 
-class PageGroup extends React.Component {
-    render() {
-        const pageBtns = []
+const PageGroup = props => {
+    const pageBtns = [];
+    pageBtns.push(
+        <span key={-9999}>&nbsp;&nbsp;</span>
+    );
+    for (let i = 0; i < props.num; ++i) {
+        const isActive = i === props.imgGroupPage ? true : false;
         pageBtns.push(
-            <span key={-9999}>&nbsp;&nbsp;</span>
-        )
-        for (let i = 0; i < this.props.num; ++i) {
-            const isActive = i === this.props.imgGroupPage ? true : false
-            pageBtns.push(
-                <PageBtn
-                    key={i}
-                    isActive={isActive}
-                    chgImgGroupPage={() => this.props.chgImgGroupPage(i)} />
-            )
-            pageBtns.push(
-                <span key={i - 100}>&nbsp;&nbsp;</span>
-            )
-        }
-        return (
-            <div className='main-img-pg-content' >
-                {pageBtns}
-            </div>
-        )
+            <PageBtn
+                key={i}
+                isActive={isActive}
+                chgImgGroupPage={() => props.chgImgGroupPage(i)} />
+        );
+        pageBtns.push(
+            <span key={i - 100}>&nbsp;&nbsp;</span>
+        );
     }
-}
+    return (
+        <div className='main-img-pg-content' >
+            {pageBtns}
+        </div>
+    );
+};
 
-class ImgGroup extends React.Component {
-    constructor(props) {
-        super(props)
-        this.ref = React.createRef()
-    }
+const ImgGroup = props => {
+    const imgWindow = useRef(null);
 
-    componentDidUpdate() {
-        this.chgWindowPage(this.props.imgGroupPage)
-    }
-
-    chgWindowPage(i) {
-        const w = window.innerWidth
-        this.ref.current.scrollTo({
-            left: w * i,
-            behavior: "smooth"
-        });
-    }
-
-    render() {
-        const path = 'https://i.imgur.com/'
-        const imgurFileName = []
-        const text = []
-        const extension = '.png'
-        const imgs = []
-        let dataLen = 0
-        if (this.props.data == null) return (<br />)
-
-        for (let i in this.props.data) {
-            ++dataLen
-            text.push(i)
-            imgurFileName.push(path + this.props.data[i].imgurFileName + extension)
+    useEffect(() => {
+        function chgWindowPage(i) {
+            const w = window.innerWidth;
+            if (imgWindow.current.scrollTo !== undefined)
+                imgWindow.current.scrollTo({
+                    left: w * i,
+                    behavior: "smooth"
+                });
+            else
+                imgWindow.current.scrollLeft += w;
         }
 
-        for (let i = 0; i < imgurFileName.length; ++i) {
-            const div = (
-                <div
-                    key={i}
-                    className='main-img-content'>
-                    <Img url={imgurFileName[i]}
-                        chgContextPage={() => this.props.chgContextPage(text[i])} />
-                    <ImgText text={text[i]} />
-                </div>)
-            imgs.push(div)
-        }
+        chgWindowPage(props.imgGroupPage);
+    });
 
-        return (
+
+    const path = 'https://i.imgur.com/';
+    const imgurFileName = [];
+    const text = [];
+    const extension = '.png';
+    const imgs = [];
+    let dataLen = 0;
+    if (props.data == null) return (<br />);
+
+    for (let i in props.data) {
+        ++dataLen;
+        text.push(i);
+        imgurFileName.push(path + props.data[i].imgurFileName + extension);
+    }
+
+    for (let i = 0; i < imgurFileName.length; ++i) {
+        const div = (
             <div
-                ref={this.ref}
-                className='img-group'>
-                {imgs}
-                <PageGroup
-                    num={dataLen}
-                    imgGroupPage={this.props.imgGroupPage}
-                    chgImgGroupPage={this.props.chgImgGroupPage} />
+                key={i}
+                className='main-img-content'>
+                <Img url={imgurFileName[i]}
+                    chgContextPage={() => props.chgContextPage(text[i])} />
+                <ImgText text={text[i]} />
             </div>
-        )
+        );
+        imgs.push(div);
     }
-}
 
+    return (
+        <div
+            ref={imgWindow}
+            className='img-group'>
+            {imgs}
+            <PageGroup
+                num={dataLen}
+                imgGroupPage={props.imgGroupPage}
+                chgImgGroupPage={props.chgImgGroupPage} />
+        </div>
+    );
+};
 
-class ContextHome extends React.Component {
-    render() {
-        return (
-            <ImgGroup
-                imgGroupPage={this.props.imgGroupPage}
-                data={this.props.data}
-                chgContextPage={this.props.chgContextPage}
-                chgImgGroupPage={this.props.chgImgGroupPage} />
-        )
-    }
-}
+const ContextHome = props => {
+    return (
+        <ImgGroup
+            imgGroupPage={props.imgGroupPage}
+            data={props.data}
+            chgContextPage={props.chgContextPage}
+            chgImgGroupPage={props.chgImgGroupPage} />
+    );
+};
 
 export { ContextHome };

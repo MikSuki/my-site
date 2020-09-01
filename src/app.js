@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-// import $ from 'jquery'
 import './index.css';
 import { Navbar } from './navbar';
 import { ContextContainer } from './context';
@@ -12,11 +11,8 @@ const useFetch = url => {
     const [loading, setLoading] = useState(true);
 
     const fetchUser = async () => {
-        // console.log('getting 1')
         const response = await fetch(url);
-        // console.log('getting 2')
         const portfolioData = await response.json();
-        // console.log('getting 3')
         for (let key in portfolioData) {
             const response = await fetch(DATA_PATH + portfolioData[key]['fileName']);
             const eachData = await response.text();

@@ -60,15 +60,11 @@ const ImgGroup = props => {
     useEffect(() => {
         function chgWindowPage(i) {
             const w = window.innerWidth;
-            if (imgWindow.current.scrollTo !== undefined)
-                imgWindow.current.scrollTo({
-                    left: w * i,
-                    behavior: "smooth"
-                });
-            else
-                imgWindow.current.scrollLeft += w;
+            imgWindow.current.scrollTo({
+                left: w * i,
+                behavior: "smooth"
+            });
         }
-
         chgWindowPage(props.imgGroupPage);
     });
 

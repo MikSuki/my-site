@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './index.css';
 import { Navbar } from './navbar';
 import { ContextContainer } from './context';
 
-const DATA_PATH = 'static/data/';
+const DATA_PATH = './data/';
 const MAIN_FILE = 'mySite.json';
 
 const useFetch = url => {
     const [portfolioData, setPortfolioData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const fetchUser = async () => {
+    const fetchUser = async() => {
         const response = await fetch(url);
         const portfolioData = await response.json();
         for (let key in portfolioData) {
@@ -38,6 +38,8 @@ const App = () => {
     useEffect(() => {
         console.log('portfolio data change')
         console.log(portfolioData)
+        console.log(DATA_PATH + MAIN_FILE)
+        console.log(MAIN_FILE)
         if (portfolioData !== null) {
             const period = 5000;
             const totalPage = Object.keys(portfolioData).length;
@@ -58,7 +60,7 @@ const App = () => {
     }, [totalImgGroupPage])
 
     const handleNavbarClose = () => {
-        const element = ref_navbar.current;
+    const element = ref_navbar.current;
         element.closeNavbar();
     }
 
@@ -74,8 +76,7 @@ const App = () => {
                     return 0;
                 return imgGroupPage + 1;
             });
-        }
-        else {
+        } else {
             setImgGroupPage(page);
         }
     };
@@ -90,20 +91,20 @@ const App = () => {
         setContextPage(contextPage);
     }
 
-    return (
-        <>
-            <Navbar
-                ref={ref_navbar}
-                data={portfolioData}
-                handleNavBtnClick={handleNavBtnClick}
-                chgContextPage={chgContextPage} />
-            <ContextContainer
-                imgGroupPage={imgGroupPage}
-                contextPage={contextPage}
-                data={portfolioData}
-                chgContextPage={chgContextPage}
-                handleNavbarClose={handleNavbarClose}
-                chgImgGroupPage={chgImgGroupPage} />
+    return ( <>
+        <Navbar 
+            ref = { ref_navbar }
+            data = { portfolioData }
+            handleNavBtnClick = { handleNavBtnClick }
+            chgContextPage = { chgContextPage }
+        /> 
+        <ContextContainer 
+            imgGroupPage = { imgGroupPage }
+            contextPage = { contextPage }
+            data = { portfolioData }
+            chgContextPage = { chgContextPage }
+            handleNavbarClose = { handleNavbarClose }
+            chgImgGroupPage = { chgImgGroupPage }/> 
         </>
     );
 }

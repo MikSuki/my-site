@@ -4,6 +4,7 @@ import { ContextDetail } from './context_detail';
 
 const ContextContainer = props => {
     const PROJECT_LIST = props.data;
+    console.log(PROJECT_LIST)
     let context;
     if (PROJECT_LIST === null) return (<br />);
     // project page

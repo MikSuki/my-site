@@ -1,4 +1,4 @@
-https://i.imgur.com/vVei1gH.jpg
+https://imgur.com/ReZZnJL.jpg
 我的碩士論文為合併經典計算機問題「最長遞增子序列 (Longest Increasing Subsequence, LIS)」的兩種變形，一種是不要求嚴格遞增的「最長近乎遞增子序列 (Longest Almost Increasing Subsequence)」，另一種是滑動視窗版本LIS的「最長遞增子序列之滑動視窗問題 (The Longest Increasing Subsequence Problem with Sliding Windows)」。
 
-LaIS和LISW這兩個問題分別可以在O(nlogn)和O(nw)的時間內完成，其中n為給定序列長度、w為視窗大小。而我提出來的演算法可以在O(nw)的時間內找到給定序列所有視窗中的近乎遞增子序列。也就是說，用同樣的時間複雜度解決了更困難的問題。
+我提出來的演算法可以有效率的找到給定序列的所有視窗中，最長的近乎遞增子序列。

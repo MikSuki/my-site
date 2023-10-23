@@ -1,0 +1,13 @@
+https://i.imgur.com/XhxHS2e.png
+●說明：
+作品介紹和Github連結
+
+●實作內容：
+1. 使用React製作RWD網頁
+2. 載入後透過Fetch獲取作品集資料後再次渲染頁面
+
+●使用語言：
+HTML、CSS、JavaScript
+
+●使用工具：
+React、Bootstrap

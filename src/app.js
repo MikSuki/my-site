@@ -21,9 +21,11 @@ const useFetch = url => {
         setPortfolioData(portfolioData);
         setLoading(false);
     };
+
     useEffect(() => {
         fetchUser();
     }, []);
+    
     return { portfolioData, loading };
 };
 
@@ -41,7 +43,7 @@ const App = () => {
         console.log(DATA_PATH + MAIN_FILE)
         console.log(MAIN_FILE)
         if (portfolioData !== null) {
-            const period = 5000;
+            const period = 10000;
             const totalPage = Object.keys(portfolioData).length;
             setTotalImgGroupPage(totalPage);
 

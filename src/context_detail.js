@@ -12,7 +12,7 @@ const RowImg = props => {
     return (
         <div className='text-center'>
             <img
-                className="main-img no-border"
+                className="main-img padding-black"
                 src={props.src}
                 alt="img not found"
             />
@@ -47,8 +47,8 @@ const Row = props =>  {
 
         return (
             <div className='row'>
-                <div className='col-12 col-sm-2 col-md-3 col-xl-3'></div>
-                <div className='col-12 col-sm-8 col-md-6 col-xl-6 text-left'>
+                <div className='col-12 col-sm-2 col-md-2 col-xl-2'></div>
+                <div className='col-12 col-sm-8 col-md-8 col-xl-8 text-left'>
                     {intro}
                 </div>
                 {/* <div className='col-12 col-md-3'></div> */}
@@ -83,6 +83,7 @@ const ContextDetail = props => {
             <br />
             <Row
                 introData={introData} />
+            <br />
             <Btn
                 ip={demoIp}
                 btnName={'DEMO'} />

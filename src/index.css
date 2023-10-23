@@ -38,7 +38,8 @@ hr {
 }
 
 .main-img {
-    width: 40vw;
+    /* width: 95vw; */
+    width: 50vw;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -52,7 +53,7 @@ hr {
 
 .padding-black {
     background: #000000;
-    padding: 5px 8px 5px 8px;
+    padding: 3px 3px 3px 3px;
 }
 
 .main-img-text {
